@@ -2,18 +2,20 @@
 
 ## makeCacheMatrix initialises objects and then defines behaviours for objects that are getting and setting values
 makeCacheMatrix <- function(x = matrix()) {
-  m <- NULL
+  i <- NULL
   set <- function(y) {
     x <<- y
-    m <<- NULL
+    i <<- NULL
   }
+  
+  ##get value
   get <- function() x
   
-  setmean <- function(solve) m <<- solve
-  getmean <- function() m
+  setinverse <- function(solve) i <<- solve
+  getinverse <- function() i
   list(set = set, get = get,
-       setmean = setmean,
-       getmean = getmean)
+       setinverse = setinverse,
+       getinverse = getinverse)
 }
 
 
@@ -23,14 +25,19 @@ makeCacheMatrix <- function(x = matrix()) {
 cacheSolve <- function(x, ...) {
         ## Return a matrix that is the inverse of 'x'
   
-  m <- x$getmean()
-  if(!is.null(m)) {
+  i <- x$getinverse()
+  
+  ##check if the inverse matrix is cached
+  if(!is.null(i)) {
     message("getting cached data")
-    return(m)
+    return(i)
   }
+  
   data <- x$get()
-  m <- solve(data, ...)
-  x$setmean(m)
-  m
+  
+  ##calculate inverse matrix
+  i <- solve(data, ...)
+  x$setinverse(i)
+  i
   
 }
